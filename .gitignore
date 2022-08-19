@@ -1,1 +1,4 @@
 /target/
+/.idea/
+/.mvn/wrapper/maven-wrapper.jar
+/srv-config.log
