@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  web:
+    image: srv-config:latest
+    networks:
+      - my-overlay
+      - backend
+    environment:
+      - DISCOVERY_URI=${DISCOVERY_URI:http://srv-discovery:8761/eureka}
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 384M
+        reservations:
+          memory: 256M
+  haproxy:
+    image: haproxytech/haproxy-alpine:latest
+    hostname: srv-config
+    networks:
+      - my-overlay
+      - backend
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    ports:
+      - "4040:80"
+      - "8434:8404"
+networks:
+  my-overlay:
+    external: true
+  backend: {}
