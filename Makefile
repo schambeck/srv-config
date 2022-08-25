@@ -47,10 +47,16 @@ docker-build:
 	DOCKER_BUILDKIT=1 docker build -f ${DOCKER_CONF} -t ${DOCKER_IMAGE} --build-arg=JAR_FILE=${JAR} target
 
 docker-run:
-	docker run -d --rm \
-		--net schambeck-net \
+	docker run -d \
+		--restart=always \
+		--net schambeck-bridge \
 		--name ${APP} \
-		--env DISCOVERY_URI='http://srv-discovery:8761/eureka' \
+		--env DISCOVERY_URI=http://srv-discovery:8761/eureka \
+		--env SPRING_RABBITMQ_HOST=rabbitmq \
+		--env SPRING_RABBITMQ_PORT=5672 \
+		--env SPRING_RABBITMQ_VIRTUAL_HOST= \
+		--env SPRING_RABBITMQ_USERNAME=guest \
+		--env SPRING_RABBITMQ_PASSWORD=guest \
 		--publish 8888:8888 \
 		${DOCKER_IMAGE}
 
