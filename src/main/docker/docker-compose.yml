@@ -3,10 +3,14 @@ services:
   web:
     image: srv-config:latest
     networks:
-      - my-overlay
-      - backend
+      - schambeck-overlay
     environment:
-      - DISCOVERY_URI=${DISCOVERY_URI:http://srv-discovery:8761/eureka}
+      - DISCOVERY_URI=http://discovery:8761/eureka
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_VIRTUAL_HOST=
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
     deploy:
       replicas: 1
       resources:
@@ -14,18 +18,9 @@ services:
           memory: 384M
         reservations:
           memory: 256M
-  haproxy:
-    image: haproxytech/haproxy-alpine:latest
-    hostname: srv-config
-    networks:
-      - my-overlay
-      - backend
-    volumes:
-      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
     ports:
-      - "4040:80"
-      - "8434:8404"
+      - target: 8888
+        published: 8888
 networks:
-  my-overlay:
+  schambeck-overlay:
     external: true
-  backend: {}
