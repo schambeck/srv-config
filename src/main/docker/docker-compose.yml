@@ -3,10 +3,12 @@ services:
   web:
     image: srv-config:latest
     networks:
-      - schambeck-overlay
+      schambeck-net:
+        aliases:
+          - srv-config
     environment:
-      - DISCOVERY_URI=http://discovery:8761/eureka
-      - SPRING_RABBITMQ_HOST=rabbitmq
+      - DISCOVERY_URI=http://srv-discovery:8761/eureka
+      - SPRING_RABBITMQ_HOST=srv-rabbitmq
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_VIRTUAL_HOST=
       - SPRING_RABBITMQ_USERNAME=guest
@@ -18,9 +20,6 @@ services:
           memory: 384M
         reservations:
           memory: 256M
-    ports:
-      - target: 8888
-        published: 8888
 networks:
-  schambeck-overlay:
+  schambeck-net:
     external: true

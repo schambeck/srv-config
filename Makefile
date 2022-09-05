@@ -107,13 +107,11 @@ compose-logs:
 
 # Docker Swarm
 
-docker-service-inspect:
-	docker service inspect ${APP}
+stack-deploy:
+	docker stack deploy -c ${COMPOSE_CONF} --with-registry-auth ${APP}
 
-docker-service-rm-web:
-	docker service rm ${APP}_web
+stack-rm:
+	docker stack rm ${APP}
 
-docker-service-rm-haproxy:
-	docker service rm ${APP}_haproxy
-
-docker-service-rm: docker-service-rm-web docker-service-rm-haproxy
+service-logs:
+	docker service logs ${APP}_web -f
