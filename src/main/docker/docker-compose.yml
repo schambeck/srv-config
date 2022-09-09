@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   web:
-    image: srv-config:latest
+    image: mschambeck/srv-config:latest
     networks:
       schambeck-net:
         aliases:
@@ -17,9 +17,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 384M
-        reservations:
           memory: 256M
+        reservations:
+          memory: 128M
 networks:
   schambeck-net:
     external: true

@@ -7,6 +7,7 @@ DOCKER_IMAGE = ${APP}:latest
 DOCKER_FOLDER = src/main/docker
 DOCKER_CONF = ${DOCKER_FOLDER}/Dockerfile
 COMPOSE_CONF = ${DOCKER_FOLDER}/docker-compose.yml
+STACK_CONF = ${DOCKER_FOLDER}/docker-stack.yml
 REPLICAS = 1
 
 # Maven
@@ -42,6 +43,8 @@ run:
 dist-docker-build: dist docker-build
 
 dist-docker-build-push: dist docker-build docker-push
+
+docker-build-push: docker-build docker-push
 
 docker-build:
 	DOCKER_BUILDKIT=1 docker build -f ${DOCKER_CONF} -t ${DOCKER_IMAGE} --build-arg=JAR_FILE=${JAR} target
@@ -108,7 +111,7 @@ compose-logs:
 # Docker Swarm
 
 stack-deploy:
-	docker stack deploy -c ${COMPOSE_CONF} --with-registry-auth ${APP}
+	docker stack deploy -c ${STACK_CONF} --with-registry-auth ${APP}
 
 stack-rm:
 	docker stack rm ${APP}
