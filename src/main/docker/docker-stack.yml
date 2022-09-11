@@ -20,6 +20,40 @@ services:
           memory: 256M
         reservations:
           memory: 128M
+  discovery:
+    image: mschambeck/srv-discovery:latest
+    networks:
+      schambeck-net:
+        aliases:
+          - srv-discovery
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+    ports:
+      - target: 8761
+        published: 8761
+  rabbitmq:
+    image: rabbitmq:3-management
+    networks:
+      schambeck-net:
+        aliases:
+          - srv-rabbitmq
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+    ports:
+      - target: 5672
+        published: 5672
+      - target: 15672
+        published: 15672
 networks:
   schambeck-net:
-    external: true
+    name: schambeck-net
+    driver: overlay
